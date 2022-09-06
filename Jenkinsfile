@@ -6,8 +6,7 @@ pipeline {
     stages {                                    // <- Список этапов
         stage("build") {                        // <- Этап 'Сборка'. В кавычках указывается название этапа.
             steps {                             // <- Шаги
-                sh "mkdir build && cd build"
-                sh "cmake .. -DTEST_ENABLED=${params.TEST_ENABLED}"
+                sh "mkdir build && cmake -B build -DTEST_ENABLED=${params.TEST_ENABLED}"
             }
 
 //            post {}                             // <- Действия по завершении этапа 'Сборка'
