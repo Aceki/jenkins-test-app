@@ -16,8 +16,8 @@ pipeline {
                 cleanWs()
                 checkout scm
                 dir("build") {
-                    sh "cmake -B build -DTEST_ENABLED=${params.TEST_ENABLED}"
-                    sh "make -j4 `nproc`"
+                    sh "cmake .. -DTEST_ENABLED=${params.TEST_ENABLED}"
+                    sh "make -j`nproc`"
                 }
             }
         }
