@@ -1,31 +1,36 @@
 pipeline {
-    agent any // <- Определяет агентов, на которых будет будет выполнятся конвейера.
-    parameters { // <- Параметры конвейера.
+    agent any
+
+    parameters {
         choice(name: "TEST_ENABLED", choices: ["OFF", "ON"], description: "Включает сборки тестов.")
         string(name: "Build directory")
     }
+
     options {
         skipDefaultCheckout(true)
     }
-    stages {                                    // <- Список этапов
-        stage("build") {                        // <- Этап 'Сборка'. В кавычках указывается название этапа.
-            steps {                             // <- Шаги
+
+    stages {
+        stage("build") {
+            steps {
                 cleanWs()
                 checkout scm
-                sh "mkdir build && cmake -B build -DTEST_ENABLED=${params.TEST_ENABLED}"
+                dir build
+                sh "cmake -B build -DTEST_ENABLED=${params.TEST_ENABLED}"
+                sh "make -j4 `nproc`"
             }
-
-//            post {}                             // <- Действия по завершении этапа 'Сборка'
         }
 
-        stage("test") {                         // <- Этап 'Тестирование'
+        stage("test") {
+            when { environment name: "TEST_ENABLED", value: "ON" }
+
             steps {
-                echo "Testing"
+                sh "make test"
             }
         }
     }
 
-    post {                                     // <- Действия по завершении всех этапов
+    post {
         always {
             cleanWs(
                 cleanWhenNotBuilt: false,
