@@ -26,7 +26,9 @@ pipeline {
             when { environment name: "TEST_ENABLED", value: "ON" }
 
             steps {
-                sh "make test"
+                dir("build") {
+                    sh "make test"
+                }
             }
         }
     }
