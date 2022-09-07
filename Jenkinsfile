@@ -3,7 +3,7 @@ pipeline {
 
     parameters {
         choice(name: "TEST_ENABLED", choices: ["ON", "OFF"], description: "Активирует сборку и запуск тестов.")
-        choice(name: "DOCS_ENABLED", choices: ["ON", "OFF"], defaultValue: "OFF", description: "Активирует генерацию документации.")
+        choice(name: "DOCS_ENABLED", choices: ["OFF", "ON"], description: "Активирует генерацию документации.")
     }
 
     options {
