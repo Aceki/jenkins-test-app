@@ -21,7 +21,7 @@ pipeline {
             }
         }
 
-        stage("Test") {
+        stage("Test - Unit testing") {
             when { environment name: "TEST_ENABLED", value: "ON" }
 
             steps {
