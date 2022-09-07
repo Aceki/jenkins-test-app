@@ -1,5 +1,5 @@
 pipeline {
-    agent { label "linux" }
+    agent any
 
     parameters {
         choice(name: "TEST_ENABLED", choices: ["OFF", "ON"], description: "Включает сборку и запуск тестов.")
@@ -29,6 +29,10 @@ pipeline {
                     sh "make test"
                 }
             }
+        }
+
+        stage("Deploy") {
+            when { branch "release/*" }
         }
     }
 
