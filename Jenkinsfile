@@ -30,10 +30,6 @@ pipeline {
                 }
             }
         }
-
-        stage("Deploy") {
-            when { branch "release/*" }
-        }
     }
 
     post {
