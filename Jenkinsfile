@@ -1,9 +1,8 @@
 pipeline {
-    agent any
+    agent { label "linux" }
 
     parameters {
-        choice(name: "TEST_ENABLED", choices: ["OFF", "ON"], description: "Включает сборки тестов.")
-        string(name: "Build directory")
+        choice(name: "TEST_ENABLED", choices: ["OFF", "ON"], description: "Включает сборку и запуск тестов.")
     }
 
     options {
@@ -11,7 +10,7 @@ pipeline {
     }
 
     stages {
-        stage("build") {
+        stage("Build") {
             steps {
                 cleanWs()
                 checkout scm
@@ -22,7 +21,7 @@ pipeline {
             }
         }
 
-        stage("test") {
+        stage("Test") {
             when { environment name: "TEST_ENABLED", value: "ON" }
 
             steps {
