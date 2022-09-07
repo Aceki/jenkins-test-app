@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     parameters {
-        choice(name: "TEST_ENABLED", choices: ["OFF", "ON"], description: "Включает сборку и запуск тестов.")
+        choice(name: "TEST_ENABLED", choices: ["ON", "OFF"], description: "Активирует сборку и запуск тестов.")
+        choice(name: "DOCS_ENABLED", choices: ["ON", "OFF"], default: "OFF", description: "Активирует генерацию документации.")
     }
 
     options {
@@ -28,6 +29,15 @@ pipeline {
                 dir("build") {
                     sh "make test"
                 }
+            }
+        }
+
+        stage("Info - Generate documentation") {
+            when { environment name: "DOCS_ENABLED", value: "ON" }
+
+            steps {
+                sh "doxygen"
+                sh "mkdir docs && mv html/ docs/"
             }
         }
     }
