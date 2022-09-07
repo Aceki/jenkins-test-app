@@ -6,15 +6,9 @@ pipeline {
         choice(name: "DOCS_ENABLED", choices: ["OFF", "ON"], description: "Активирует генерацию документации.")
     }
 
-    options {
-        skipDefaultCheckout(true)
-    }
-
     stages {
         stage("Build") {
             steps {
-                cleanWs()
-                checkout scm
                 dir("build") {
                     sh "cmake .. -DTEST_ENABLED=${params.TEST_ENABLED}"
                     sh "make -j`nproc`"
@@ -39,21 +33,6 @@ pipeline {
                 sh "doxygen"
                 sh "mkdir docs && mv html/ docs/"
             }
-        }
-    }
-
-    post {
-        always {
-            cleanWs(
-                cleanWhenNotBuilt: false,
-                deleteDirs: true,
-                disableDeferredWipeout: true,
-                notFailBuild: true,
-                patterns: [
-                    [pattern: '.gitignore', type: 'INCLUDE'],
-                    [pattern: '.propsfile', type: 'EXCLUDE']
-                ]
-            )
         }
     }
 }
